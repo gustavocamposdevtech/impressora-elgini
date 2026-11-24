@@ -19,7 +19,7 @@ O trabalho faz parte da disciplina de **Programação Orientada a Objetos**.
 
 ---
 
-## 📁 Estrutura do Projeto
+ Estrutura do Projeto
 
 /src → Código-fonte principal
 /lib → Bibliotecas e dependências externas
@@ -71,8 +71,8 @@ O trabalho faz parte da disciplina de **Programação Orientada a Objetos**.
 
 ---
 
-## 👥 Autores  
-*(em ordem alfabética)*
+ Autores  
+*
 
 - Anthony Paulino
 - Enzo Gambarini
