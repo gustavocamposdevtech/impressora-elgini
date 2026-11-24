@@ -36,7 +36,7 @@ public class Main {
         int ImprimeXMLCancelamentoSAT(String dados, String assQRCode, int param);
     }
 
-    private static final String USUARIO = "admin";
+private static final String USUARIO = "admin";
     private static final String SENHA = "1234";
     // Chave de teste fornecida junto com os arquivos da atividade.
     private static final String ASS_QRCODE = "Q5DLkpdRijIRGY6YSSNsTWK1TztHL1vD0V1Jc4spo/CEUqICEb9SFy82ym8EhBRZjbh3btsZhF+sjHqEMR159i4agru9x6KsepK/q0E2e5xlU5cv3m1woYfgHyOkWDNcSdMsS6bBh2Bpq6s89yJ9Q6qh/J8YHi306ce9Tqb/drKvN2XdE5noRSS32TAWuaQEVd7u+TrvXlOQsE3fHR1D5f1saUwQLPSdIv01NF6Ny7jZwjCwv1uNDgGZONJdlTJ6p0ccqnZvuE70aHOI09elpjEO6Cd+orI7XHHrFCwhFhAcbalc+ZfO5b/+vkyAHS6CYVFCDtYR9Hi5qgdk31v23w==";
@@ -101,7 +101,7 @@ public class Main {
         }
     }
 
-    public static boolean fazerLogin() {
+ public static boolean fazerLogin() {
         for (int tentativa = 1; tentativa <= 3; tentativa++) {
             String usuario = capturarEntrada("Usuário: ");
             String senha = capturarEntrada("Senha: ");
@@ -186,23 +186,35 @@ public class Main {
         }
     }
 
-    public static void imprimirTexto() {
+public static void imprimirTexto() {
         if (!exigirConexao()) return;
         String texto = capturarEntrada("Texto a imprimir: ");
+        if (texto.isEmpty()) {
+            System.out.println("Digite algum texto antes de imprimir.");
+            return;
+        }
+
         int copias = lerInteiro("Quantas cópias? ");
         if (copias < 1) {
             System.out.println("Informe pelo menos uma cópia.");
             return;
         }
+
+        int copiasEnviadas = 0;
         for (int i = 1; i <= copias; i++) {
             int retorno = ImpressoraDLL.INSTANCE.ImpressaoTexto(texto, 1, 4, 0);
             if (retorno >= 0) {
+                copiasEnviadas++;
                 System.out.println("Cópia " + i + " enviada à impressora.");
             } else {
                 System.out.println("Erro ao imprimir a cópia " + i + ". Código: " + retorno);
             }
         }
-        cortarPapel();
+
+        System.out.println("Total de cópias enviadas: " + copiasEnviadas + " de " + copias + ".");
+        if (copiasEnviadas > 0) {
+            cortarPapel();
+        }
     }
 
     public static void imprimirQRCode() {
@@ -246,7 +258,7 @@ public class Main {
         mostrarResultado("Abertura da gaveta", retorno);
     }
 
-    public static void sinalSonoro() {
+public static void sinalSonoro() {
         if (!exigirConexao()) return;
         int quantidade;
         do {
@@ -268,6 +280,13 @@ public class Main {
         mostrarResultado("Avanço do papel", retorno);
     }
 
+    // Consulta o status atual da impressora.
+    public static void consultarStatus() {
+        if (!exigirConexao()) return;
+        int retorno = ImpressoraDLL.INSTANCE.StatusImpressora(0);
+        System.out.println("Código retornado pelo status: " + retorno);
+    }
+
     public static void exibirMenu() {
         System.out.println("\n===== MENU DA IMPRESSORA ELGIN =====");
         System.out.println("1  - Configurar conexão");
@@ -281,6 +300,7 @@ public class Main {
         System.out.println("9  - Abrir gaveta");
         System.out.println("10 - Emitir sinal sonoro");
         System.out.println("11 - Avançar papel");
+        System.out.println("12 - Consultar status");
         System.out.println("0  - Sair");
     }
 
@@ -314,6 +334,8 @@ public class Main {
                     sinalSonoro();
                 } else if (opcao == 11) {
                     avancarPapel();
+                } else if (opcao == 12) {
+                    consultarStatus();
                 } else if (opcao == 0) {
                     fecharConexao();
                 } else {
